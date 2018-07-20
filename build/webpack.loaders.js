@@ -1,10 +1,6 @@
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const isProd = process.env.NODE_ENV === 'production';
 
-module.exports = {
-  vue, less, css
-};
-
 function cssLoader() {
   return {
     loader: 'css-loader',
@@ -70,30 +66,32 @@ function lessBlock(isVue) {
   
   return isProd
     ? ExtractTextPlugin.extract({
-        use: devArray,
-        fallback: styleLoader()
-      })
+      use: devArray,
+      fallback: styleLoader()
+    })
     : proArray
 }
 
-function css() {
+function css(includeCompiler) {
   return {
     test: /\.css$/,
-    use: cssBlock()
+    use: cssBlock(),
+    include: includeCompiler,
   }
 }
 
 function less() {
   return {
     test: /\.less$/,
-    use: lessBlock()
+    use: lessBlock(),
   }
 }
 
-function vue() {
+function vue(includeCompiler) {
   return {
     test: /\.vue$/,
     loader: "vue-loader",
+    include: includeCompiler,
     options: {
       preserveWhitespace: false,
       loaders: {
@@ -103,3 +101,7 @@ function vue() {
     }
   }
 }
+
+module.exports = {
+  vue, less, css
+};

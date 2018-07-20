@@ -1,3 +1,3 @@
 export default {
-  popState: true
+  popState: false
 }

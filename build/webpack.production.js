@@ -1,10 +1,15 @@
 const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const { VueLoaderPlugin } = require('vue-loader');
 const webpack = require('webpack');
+const { VueLoaderPlugin } = require('vue-loader');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const { vue, less, css } = require('./webpack.loaders');
 const VoeRuntime = require('@voejs/runtime/voe');
+const compiler = require('./webpack.source.compile');
+const IncludeCompiler = compiler(process.cwd(), {
+  dirs: /.+/i,
+  modules: []
+});
 
 module.exports = {
   mode: 'production',
@@ -14,10 +19,12 @@ module.exports = {
       {
         test: /\.jsx$/,
         loader: 'babel-loader',
+        include: IncludeCompiler
       },
       {
         test: /\.js$/,
-        loader: 'babel-loader'
+        loader: 'babel-loader',
+        include: IncludeCompiler
       },
       {
         test: /\.(svg|eot|woff|ttf)$/,
@@ -28,9 +35,9 @@ module.exports = {
           }
         }]
       },
-      vue(),
-      less(),
-      css()
+      css(),
+      vue(IncludeCompiler),
+      less(IncludeCompiler)
     ]
   },
   output: {
@@ -46,9 +53,7 @@ module.exports = {
   plugins: [
     new VoeRuntime(),
     new ExtractTextPlugin('style.[hash:10].css'),
-    new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, '../index.html')
-    }),
+    new HtmlWebpackPlugin({ template: path.resolve(__dirname, '../index.html') }),
     new VueLoaderPlugin({
       version: '1.0.1',
       ServiceWorker: {

@@ -1,5 +1,8 @@
 <template>
-  <div>{{text}}</div>
+  <div class="page">
+    <h1>{{text}}</h1>
+    <p>You are using `Voe.js`</p>
+  </div>
 </template>
 
 <script>
@@ -11,6 +14,9 @@
   }
 </script>
 
-<style scoped>
-
+<style lang="less" scoped>
+  .page{
+    text-align: center;
+    padding-top: 100px;
+  }
 </style>

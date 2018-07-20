@@ -1,7 +1,20 @@
 {
+  "presets": [
+    ["env", {
+      "module": false
+    }]
+  ],
   "plugins": [
     "transform-vue-jsx",
     "transform-decorators-legacy",
-    "transform-class-properties"
+    "transform-class-properties",
+    [
+      "transform-runtime",
+      {
+        "helpers": false,
+        "polyfill": false,
+        "regenerator": true
+      }
+    ]
   ]
 }
